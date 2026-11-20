@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国内 AI 大厂动态监测台 · 按重要度排序</title>
+<style>
+:root{
+  --bg:#F4F6F9; --surface:#FFFFFF;
+  --ink:#1B2A41; --ink-2:#47566B; --ink-3:#7A8799;
+  --line:#E3E8EF; --line-soft:#EDF1F6;
+  --navy:#1B365D; --navy-2:#2B4E80;
+  --shadow:0 1px 2px rgba(27,42,65,.04),0 6px 20px rgba(27,42,65,.05);
+  --shadow-hover:0 4px 12px rgba(27,42,65,.08),0 14px 36px rgba(27,42,65,.09);
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",Segoe UI,sans-serif;
+  font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+button,input,select{font-family:inherit;font-size:inherit}
+button{cursor:pointer}
+.num{font-variant-numeric:tabular-nums}
+.app{max-width:1080px;margin:0 auto;padding:0 28px 56px}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:30;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  margin:0 -28px 20px;padding:14px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.mark{
+  width:38px;height:38px;flex:none;border-radius:10px;
+  background:linear-gradient(140deg,var(--navy) 0%,#3C6BA8 100%);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;letter-spacing:.5px;box-shadow:0 3px 10px rgba(27,54,93,.22);
+}
+.brand h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.2px;color:var(--navy)}
+.brand p{margin:1px 0 0;font-size:12px;color:var(--ink-3)}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.meta-pill{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);background:#F6F8FB;border:1px solid var(--line);padding:6px 11px;border-radius:8px;white-space:nowrap}
+.dot{width:7px;height:7px;border-radius:50%;background:#18A058;flex:none}
+.btn{border:1px solid var(--line);background:#fff;color:var(--ink-2);padding:7px 13px;border-radius:8px;font-size:12.5px;font-weight:600;transition:.16s ease;white-space:nowrap}
+.btn:hover{border-color:#B9C8DC;color:var(--navy);background:#FAFCFF}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.primary:hover{background:var(--navy-2);color:#fff}
+
+/* ---------- 排序口径（安静的一句话） ---------- */
+.quiet-note{background:linear-gradient(120deg,#F7FAFF 0%,#FFFFFF 72%);border:1px solid #DDE7F5;border-left:3px solid var(--navy);border-radius:var(--radius);padding:14px 18px;margin-bottom:18px;font-size:12.9px;color:var(--ink-2);line-height:1.85;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.quiet-note .qn-main{flex:1;min-width:260px}
+.quiet-note b{color:var(--navy)}
+.quiet-note .formula{font-variant-numeric:tabular-nums;color:var(--navy);font-weight:700}
+.linkbtn{border:0;background:transparent;color:var(--navy);font-size:12px;font-weight:650;padding:5px 2px;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
+.linkbtn:hover{color:var(--navy-2)}
+
+/* ---------- controls ---------- */
+.controls{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px 18px;margin-bottom:18px}
+.company-tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--line-soft)}
+.tab{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fff;color:var(--ink-2);padding:6px 11px;border-radius:9px;font-size:12.5px;font-weight:650;transition:.16s ease}
+.tab:hover{border-color:#B9C8DC;background:#FAFCFF}
+.tab .t-dot{width:8px;height:8px;border-radius:50%;flex:none}
+.tab .t-n{font-size:11px;font-weight:600;color:var(--ink-3);background:#F1F4F8;padding:1px 6px;border-radius:6px}
+.tab.active{color:#fff;border-color:var(--navy);background:var(--navy);box-shadow:0 3px 10px rgba(27,54,93,.18)}
+.tab.active .t-n{background:rgba(255,255,255,.2);color:#fff}
+
+.tool-row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.search{position:relative;flex:1;min-width:200px}
+.search input{width:100%;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:9px;background:#FAFBFD;color:var(--ink);outline:none;transition:.16s ease}
+.search input:focus{border-color:#8FB0DE;background:#fff;box-shadow:0 0 0 3px rgba(27,54,93,.08)}
+.search .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9AA7B8;font-size:14px;pointer-events:none}
+.search .kbd{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:10px;color:#A6B1C0;border:1px solid var(--line);border-radius:4px;padding:0 5px;background:#fff}
+select.sel{padding:9px 30px 9px 11px;border:1px solid var(--line);border-radius:9px;background:#FAFBFD;color:var(--ink-2);outline:none;font-size:12.5px;font-weight:600;appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M1 1l4 4 4-4' fill='none' stroke='%237A8799' stroke-width='1.5'/></svg>");
+  background-repeat:no-repeat;background-position:right 11px center}
+select.sel:focus{border-color:#8FB0DE}
+.seg{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:#FAFBFD}
+.seg button{border:0;background:transparent;padding:8px 12px;font-size:12.5px;font-weight:600;color:var(--ink-3);transition:.15s}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.active{background:var(--navy);color:#fff}
+
+.chip-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:13px}
+.chip-row .lb{font-size:11.5px;color:var(--ink-3);margin-right:2px;font-weight:600}
+.fchip{border:1px solid var(--line);background:#fff;color:var(--ink-2);padding:5px 11px;border-radius:99px;font-size:12px;font-weight:600;transition:.15s}
+.fchip:hover{border-color:#B9C8DC;background:#FAFCFF}
+.fchip.active{color:#fff;border-color:var(--navy);background:var(--navy)}
+.spacer{flex:1}
+
+.result-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 2px 14px;font-size:12.5px;color:var(--ink-3);flex-wrap:wrap}
+.result-bar strong{color:var(--navy);font-size:14px}
+.result-bar b{color:var(--navy)}
+.result-bar .basis{font-size:11.5px}
+
+/* ---------- 单列重要度榜单 ---------- */
+.rank-list{display:grid;gap:10px}
+.rank-row{display:flex;gap:14px;background:#fff;border:1px solid var(--line);border-radius:11px;padding:14px 16px;box-shadow:var(--shadow);transition:.16s ease}
+.rank-row:hover{box-shadow:var(--shadow-hover);border-color:#CDD8E6}
+.score-block{flex:none;width:68px;text-align:center;border-right:1px solid var(--line-soft);padding-right:14px;align-self:stretch;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px}
+.score-block .sn{font-size:10px;color:var(--ink-3);font-weight:600;letter-spacing:.3px}
+.score-block .sv{font-size:27px;font-weight:750;line-height:1;color:var(--navy);letter-spacing:-1px}
+.score-block .sl{font-size:10.5px;font-weight:700;padding:1px 8px;border-radius:99px;border:1px solid;background:#fff}
+.rank-main{flex:1;min-width:0}
+.rank-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:7px}
+.badge{font-size:11px;font-weight:750;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.cat{font-size:11px;font-weight:650;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.lv{font-size:10.5px;font-weight:650;padding:2px 7px;border-radius:6px;white-space:nowrap;border:1px solid}
+.lv.t1{color:#0F6B3E;background:#E6F6EC;border-color:#BFE6CF}
+.lv.t15{color:#1657A8;background:#E9F1FC;border-color:#C9DDF5}
+.lv.t2{color:#8A5A0E;background:#FFF5E2;border-color:#EFDDB4}
+.lv.t3{color:#5A6675;background:#F1F3F6;border-color:#DDE2E9}
+.rank-title{margin:0 0 7px;font-size:14.5px;line-height:1.55;font-weight:700;color:var(--ink)}
+.rank-title a{color:inherit}
+.rank-title a:hover{color:var(--navy);text-decoration:underline;text-underline-offset:3px}
+.rank-title .ext{font-size:10.5px;color:#A6B1C0;font-weight:600;margin-left:5px}
+.rank-sum{margin:0 0 9px;font-size:12.6px;line-height:1.75;color:var(--ink-2)}
+.rank-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--ink-3)}
+.rank-meta .sep{color:#C7D0DB}
+.rank-meta .specin{color:#26405F}
+mark{background:#FFE9A8;color:#6B4A00;border-radius:2px;padding:0 1px}
+
+.why{margin-top:10px;border-top:1px dashed var(--line-soft);padding-top:8px}
+.why summary{font-size:11.5px;color:var(--navy);font-weight:650;cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:5px}
+.why summary::-webkit-details-marker{display:none}
+.why summary:before{content:"⊕";font-size:12px;color:var(--ink-3)}
+.why[open] summary:before{content:"⊖"}
+.why-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.why-cell{background:#F8FAFC;border:1px solid var(--line-soft);border-radius:7px;padding:8px 10px}
+.why-cell .k{font-size:10px;color:var(--ink-3);font-weight:700;letter-spacing:.3px}
+.why-cell .v{font-size:16px;font-weight:750;color:var(--navy);line-height:1.35;font-variant-numeric:tabular-nums}
+.why-cell .v small{font-size:10px;color:var(--ink-3);font-weight:600}
+.why-cell .r{font-size:10.5px;color:var(--ink-2);margin-top:3px;line-height:1.5}
+.why-total{font-size:11px;color:var(--ink-3);margin-top:9px;line-height:1.7}
+.why-total b{color:var(--navy);font-size:12.5px}
+
+.day-head{display:flex;align-items:center;gap:10px;margin:18px 0 10px}
+.day-head:first-child{margin-top:2px}
+.day-head h3{margin:0;font-size:12.5px;font-weight:750;color:var(--navy);white-space:nowrap}
+.day-head .line{flex:1;height:1px;background:var(--line-soft)}
+.day-head .cnt{font-size:11px;color:var(--ink-3);white-space:nowrap}
+
+.more-wrap{text-align:center;margin:20px 0 6px}
+.more-btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:9px 22px;border-radius:9px;font-size:12.5px;font-weight:650;transition:.16s ease}
+.more-btn:hover{border-color:#B9C8DC;background:#FAFCFF}
+.more-hint{font-size:11.5px;color:var(--ink-3);margin-top:8px}
+.empty{text-align:center;padding:56px 20px;background:#fff;border:1px dashed var(--line);border-radius:12px;color:var(--ink-3)}
+.empty .big{font-size:15px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+
+/* ---------- 折叠的厂商分布 ---------- */
+.vendor-fold{margin-top:28px;background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:0 18px}
+.vendor-fold summary{padding:14px 0;font-size:12.5px;font-weight:700;color:var(--navy);cursor:pointer;list-style:none}
+.vendor-fold summary::-webkit-details-marker{display:none}
+.vendor-fold summary:before{content:"▸ ";color:var(--ink-3)}
+.vendor-fold[open] summary:before{content:"▾ "}
+.vendor-fold .vf-body{padding-bottom:16px}
+#vendorPanel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:18px;row-gap:0}
+.vendor-item{min-width:0;margin-bottom:11px}
+.vendor-row{display:flex;align-items:center;gap:8px}
+.v-name{width:52px;flex:none;font-size:12px;font-weight:700;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-track{flex:1;min-width:24px;height:8px;background:#F0F3F7;border-radius:99px;overflow:hidden}
+.v-fill{height:100%;border-radius:99px}
+.v-count{width:30px;text-align:right;flex:none;font-size:12.5px;font-weight:750;color:var(--ink)}
+
+footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-3);line-height:1.9}
+footer b{color:var(--ink-2)}
+footer code{background:#EDF1F6;border-radius:4px;padding:1px 5px;font-size:11px;color:#B3411B}
+
+/* ---------- modal ---------- */
+.mask{position:fixed;inset:0;background:rgba(20,32,50,.42);z-index:60;display:none;align-items:center;justify-content:center;padding:20px}
+.mask.show{display:flex}
+.modal{background:#fff;border-radius:14px;max-width:720px;width:100%;max-height:84vh;overflow:auto;box-shadow:0 24px 70px rgba(15,28,48,.28)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--line)}
+.modal-head h3{margin:0;font-size:16px;color:var(--navy);font-weight:750}
+.modal-head button{border:0;background:#F2F5F9;width:28px;height:28px;border-radius:7px;color:var(--ink-2);font-size:17px;line-height:1}
+.modal-body{padding:18px 22px 24px;font-size:13px;color:var(--ink-2);line-height:1.85}
+.modal-body h4{margin:20px 0 8px;font-size:13px;color:var(--navy);font-weight:750}
+.modal-body h4:first-child{margin-top:0}
+.modal-body p{margin:6px 0}
+.modal-body ul{padding-left:18px;margin:6px 0}
+.modal-body code{background:#F2F5F9;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12px;color:#B3411B}
+.note{background:#FFF8E8;border:1px solid #F1E0B8;border-radius:9px;padding:11px 14px;color:#7A5A16;font-size:12.5px}
+.score-table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}
+.score-table th,.score-table td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+.score-table th{background:#F7FAFF;color:var(--navy);font-weight:700;white-space:nowrap}
+.score-table td.w{font-weight:750;color:var(--navy);white-space:nowrap}
+.rule-block{background:#F8FAFC;border:1px solid var(--line-soft);border-radius:8px;padding:9px 12px;margin-bottom:8px;font-size:12.3px;line-height:1.75}
+.rule-block b{color:var(--navy)}
+.rule-block .rv{color:var(--ink-2);font-variant-numeric:tabular-nums}
+#scopeList{columns:2;column-gap:26px}
+#scopeList li{break-inside:avoid}
+
+@media(max-width:900px){#vendorPanel{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:720px){
+  .app{padding:0 14px 40px}
+  .topbar{margin:0 -14px 18px;padding:12px 14px}
+  .brand p{display:none}
+  .search{min-width:100%}
+  .why-grid{grid-template-columns:repeat(2,1fr)}
+  .score-block{width:56px;padding-right:10px}
+  .score-block .sv{font-size:22px}
+  #vendorPanel{grid-template-columns:1fr}
+  #scopeList{columns:1}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="mark">AI</div>
+      <div>
+        <h1>国内 AI 大厂动态监测台</h1>
+        <p id="brandSub">21 家厂商 · 按重要度评分排序</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <span class="meta-pill"><span class="dot"></span><span id="metaUpdated">数据检索日 —</span></span>
+      <span class="meta-pill">全库 <b class="num" id="metaTotal">0</b> 条</span>
+      <button class="btn" id="btnInfo">数据说明</button>
+      <button class="btn primary" id="btnExport">导出 CSV</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="quiet-note">
+      <div class="qn-main">
+        <b>排序口径</b>：按「这条事实本身值不值得你知道」给每条动态打分。
+        <span class="formula" id="qnFormula"></span>，分高者居前；默认只露出得分最高的 10 条，每条都能点开核对分数怎么来的。
+      </div>
+      <button class="linkbtn" id="btnHow">查看评分方法 →</button>
+    </section>
+
+    <section class="controls">
+      <div class="company-tabs" id="companyTabs"></div>
+      <div class="tool-row">
+        <div class="search">
+          <span class="ico">⌕</span>
+          <input type="text" id="searchInput" placeholder="搜索标题、摘要、参数、产品线、来源…" autocomplete="off">
+          <span class="kbd">/</span>
+        </div>
+        <select class="sel" id="scopeSel">
+          <option value="top">最值得看（前 10 条）</option>
+          <option value="important">重要信息（≥ 85 分）</option>
+          <option value="watch">关注及以上（≥ 65 分）</option>
+          <option value="all">全部动态</option>
+        </select>
+        <select class="sel" id="rangeSel">
+          <option value="all">全部时间</option>
+          <option value="7">近 7 天</option>
+          <option value="30">近 30 天</option>
+          <option value="90">近 90 天</option>
+        </select>
+        <select class="sel" id="tierSel"></select>
+        <div class="seg" id="viewSeg">
+          <button data-view="rank" class="active">按重要度</button>
+          <button data-view="time">按时间</button>
+        </div>
+      </div>
+      <div class="chip-row" id="catRow"></div>
+      <div class="chip-row">
+        <span class="lb">提示</span>
+        <span style="font-size:11.5px;color:var(--ink-3)">分数由「事实分量 / 信源可信度 / 可验证度 / 时效」四项相加，点每条下方「评分依据」可逐项复核</span>
+        <span class="spacer"></span>
+        <button class="linkbtn" id="btnReset">清除全部筛选</button>
+      </div>
+    </section>
+
+    <div class="result-bar">
+      <div>命中 <strong class="num" id="resultCount">0</strong> 条 · 已显示 <b class="num" id="shownCount">0</b> 条 <span id="resultDesc"></span></div>
+      <div class="basis" id="basisText"></div>
+    </div>
+
+    <section id="content"></section>
+
+    <details class="vendor-fold" id="vendorFold">
+      <summary>厂商分布（<span id="foldCount">0</span> 家）· 点开查看</summary>
+      <div class="vf-body"><div id="vendorPanel"></div></div>
+    </details>
+  </main>
+
+  <footer>
+    <b>数据说明：</b>检索整理快照，非实时爬虫。每条动态按「事实分量 / 信源可信度 / 可验证度 / 时效」四维打分（满分 100）排序，完整规则写在 <code>data.js</code> 的 <code>meta.scoring</code>，可逐条点开核对；摘要只写可验证事实，点标题直达原文。数据截至 <span id="footDate"></span>，覆盖 <span id="footCoverage"></span>。<br>
+    <b>更新方式：</b>编辑同目录下的 <code>data.js</code>，替换 <code>items</code> 数组并修改 <code>meta.updatedAt</code>，刷新本页即可生效，无需改动 <code>index.html</code>。想调整权重，改 <code>meta.scoring</code> 一处即可。
+  </footer>
+</div>
+
+<div class="mask" id="mask">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="数据说明">
+    <div class="modal-head"><h3>什么是重要信息 · 评分方法与数据说明</h3><button id="btnClose" aria-label="关闭">×</button></div>
+    <div class="modal-body">
+      <div class="note">这是「检索整理快照 + 可持续更新机制」，不是实时抓取工具。页面不会自动联网，数据来自公开信源的检索整理，每条都保留原始链接，点标题即可直达原文核对。</div>
+
+      <h4>一、判断原则</h4>
+      <p id="scorePrinciple"></p>
+
+      <h4>二、四个维度（满分 <span id="scoreTotal">100</span> 分）</h4>
+      <table class="score-table"><thead><tr><th>维度</th><th>满分</th><th>判断什么</th></tr></thead><tbody id="scoreDimTable"></tbody></table>
+
+      <h4>三、逐项打分细则</h4>
+      <div id="scoreRules"></div>
+
+      <h4>四、等级与默认露出</h4>
+      <ul id="levelList"></ul>
+      <p id="scoreTie"></p>
+      <p id="scoreExcluded"></p>
+
+      <h4>五、信源等级定义</h4>
+      <ul id="tierDefList"></ul>
+
+      <h4>六、监测范围（<span id="scopeCount">—</span> 家厂商）</h4>
+      <ul id="scopeList"></ul>
+
+      <h4>七、字段口径</h4>
+      <ul>
+        <li><b>tier / tierName</b>：信源等级（数字 id 与展示名），参与「信源可信度」打分。</li>
+        <li><b>spec</b>：可验证参数行（参数规模 / 上下文 / 定价 / 许可 / 跑分），参与「可验证度」打分。</li>
+        <li><b>date</b>：只有月份可考时写 <code>YYYY-MM</code>，显示为该月，不虚构具体日期。</li>
+        <li><b>重要度分数</b>：不写死在数据里，由 <code>meta.scoring</code> 的规则实时算出，改规则即全库重算。</li>
+      </ul>
+
+      <h4>八、如何更新数据</h4>
+      <ul>
+        <li>打开同目录的 <code>data.js</code>，这是唯一数据源。</li>
+        <li>按现有字段往 <code>items</code> 追加新条目，<code>id</code> 保持唯一，填好 <code>tier</code>，重点事实补 <code>spec</code>。</li>
+        <li>修改 <code>meta.updatedAt</code> 为新的检索日期；想调整评分口径只改 <code>meta.scoring</code>。</li>
+        <li>保存后刷新页面即生效。时效打分以数据中最新的日期为基准，不依赖系统时间。</li>
+      </ul>
+
+      <h4>九、已具备的工具能力</h4>
+      <ul>
+        <li>公司 / 动态类型 / 信源等级 / 时间范围 多维筛选，全文搜索与关键词高亮。</li>
+        <li>按重要度（单列榜单，默认前 10 条、可逐层展开）与按时间（按日）两种组织方式。</li>
+        <li>每条可展开「评分依据」核对 A/B/C/D 四项得分；标题直达原文；当前结果导出 CSV（含分数与各项得分）。</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var D = window.MONITOR_DATA;
+  var content = document.getElementById('content');
+
+  if(!D || !D.items){
+    content.innerHTML = '<div class="empty"><div class="big">数据文件未加载</div>请确认 <b>data.js</b> 与 <b>index.html</b> 位于同一目录后刷新页面。</div>';
+    return;
+  }
+
+  var cmap = {};
+  D.companies.forEach(function(c){ cmap[c.id] = c; });
+
+  var S = D.meta.scoring;
+  var tierById = {}, tierKeyById = {};
+  D.meta.tiers.forEach(function(t){ tierById[t.id] = t; tierKeyById[t.id] = t.key; });
+  var TIER_OPTIONS = [
+    {v:'all',label:'全部信源'}, {v:'official',label:'官方系（一手 + 官方媒体）'},
+    {v:'T1',label:'官方一手'}, {v:'T1.5',label:'官方媒体'},
+    {v:'T2',label:'权威媒体'}, {v:'T3',label:'行业聚合'}
+  ];
+  var optLabel = {}; TIER_OPTIONS.forEach(function(o){ optLabel[o.v] = o.label; });
+  var SCOPE_LABEL = {top:'最值得看（前 10 条）',important:'重要信息',watch:'关注及以上',all:'全部动态'};
+  var catStyle = {
+    "模型发布":["#E8F0FE","#1A56C4"],"产品上线":["#E7F7EE","#137A4C"],
+    "开源开放":["#F0EAFE","#6B3FD4"],"硬件终端":["#FFF0E3","#B85A12"],
+    "生态大会":["#E4F5F8","#0E7280"],"战略资本":["#FCEBEC","#B4232F"],
+    "内测曝光":["#FFF7DB","#96620B"],"行业动态":["#EEF1F5","#4A5568"]
+  };
+
+  var state = {
+    company:'all', cats:new Set(), tier:'all', range:'all',
+    q:'', view:'rank', scope:'top', limit:10
+  };
+
+  var anchor = D.items.reduce(function(m,i){ return cmpDate(i.date) > m ? cmpDate(i.date) : m; }, '0000-00-00');
+  var anchorMs = dateMs(anchor);
+
+  function cmpDate(d){ if(!d) return '0000-00-00'; return d.length === 7 ? d + '-15' : d; }
+  function dateMs(d){ return new Date(cmpDate(d) + 'T00:00:00Z').getTime(); }
+  function shiftDays(iso, days){
+    var p = iso.split('-').map(Number);
+    var dt = new Date(Date.UTC(p[0], p[1]-1, p[2]));
+    dt.setUTCDate(dt.getUTCDate() - days);
+    return dt.toISOString().slice(0,10);
+  }
+  function fmtDate(d){
+    if(!d) return '';
+    if(d.length === 7) return d.slice(0,4) + '年' + Number(d.slice(5,7)) + '月';
+    var p = d.split('-'); return Number(p[1]) + '月' + Number(p[2]) + '日';
+  }
+  function fmtDayHead(d){
+    if(!d) return '';
+    if(d.length === 7) return d.slice(0,4) + ' 年 ' + Number(d.slice(5,7)) + ' 月（本月）';
+    var p = d.split('-'); return Number(p[1]) + ' 月 ' + Number(p[2]) + ' 日';
+  }
+  function esc(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function hl(s){
+    var out = esc(s), q = state.q.trim();
+    if(!q) return out;
+    q.split(/\s+/).filter(Boolean).forEach(function(w){
+      var safe = w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      try{ out = out.replace(new RegExp('('+safe+')','gi'), '<mark>$1</mark>'); }catch(e){}
+    });
+    return out;
+  }
+  function tierClass(t){ return t===1?'t1':(t===1.5?'t15':(t===2?'t2':'t3')); }
+  function tierBadge(it){
+    var t = tierById[it.tier] || {};
+    return '<span class="lv '+tierClass(it.tier)+'" title="'+esc(t.desc||'')+'">'+esc(it.tierName||'')+'</span>';
+  }
+  function matchTierVal(it, v){
+    if(v === 'all') return true;
+    if(v === 'official') return it.tier <= 1.5;
+    return tierKeyById[it.tier] === v;
+  }
+
+  /* ---------- 重要性评分：规则全部来自 D.meta.scoring ---------- */
+  var scoreMap = {};
+  D.items.forEach(function(it){
+    var a = S.catScore[it.category] != null ? S.catScore[it.category] : 8;
+    var b = S.tierScore[String(it.tier)] != null ? S.tierScore[String(it.tier)] : 6;
+    var c, cLabel;
+    if(it.spec){ c = S.specScore.spec; cLabel = '带 spec 参数行'; }
+    else if(/\d/.test(it.summary)){ c = S.specScore.numeric; cLabel = '摘要含可核对数字'; }
+    else { c = S.specScore.none; cLabel = '纯定性描述'; }
+    var days = (anchorMs - dateMs(it.date)) / 86400000;
+    var last = S.recencyScore[S.recencyScore.length-1];
+    var d = last.score, dLabel = last.label;
+    for(var i=0;i<S.recencyScore.length;i++){
+      if(days <= S.recencyScore[i].within){ d = S.recencyScore[i].score; dLabel = S.recencyScore[i].label; break; }
+    }
+    var total = a + b + c + d, level = S.levels[S.levels.length-1];
+    for(var j=0;j<S.levels.length;j++){ if(total >= S.levels[j].min){ level = S.levels[j]; break; } }
+    scoreMap[it.id] = { total:total, a:a, b:b, c:c, d:d, level:level,
+      aLabel:it.category, bLabel:it.tierName, cLabel:cLabel, dLabel:dLabel };
+  });
+  function score(it){ return scoreMap[it.id]; }
+
+  function filtered(){
+    var cutoff = state.range === 'all' ? null : shiftDays(anchor, Number(state.range)-1);
+    var q = state.q.trim().toLowerCase();
+    var arr = D.items.filter(function(it){
+      if(state.company !== 'all' && it.company !== state.company) return false;
+      if(state.cats.size && !state.cats.has(it.category)) return false;
+      if(!matchTierVal(it, state.tier)) return false;
+      if(cutoff && cmpDate(it.date) < cutoff) return false;
+      if(q){
+        var c = cmap[it.company] || {};
+        var hay = [it.title,it.summary,it.category,it.tierName,it.spec||'',it.source,
+                   (it.products||[]).join(' '),c.name,c.short,c.lines].join(' ').toLowerCase();
+        var words = q.split(/\s+/).filter(Boolean);
+        for(var i=0;i<words.length;i++){ if(hay.indexOf(words[i]) === -1) return false; }
+      }
+      return true;
+    });
+    arr.sort(function(x,y){
+      var diff = score(y).total - score(x).total;
+      if(diff) return diff;                                        /* 1. 分数高者居前 */
+      var dr = cmpDate(y.date).localeCompare(cmpDate(x.date));      /* 2. 同分：日期更近 */
+      if(dr) return dr;
+      var tr = x.tier - y.tier;                                    /* 3. 同分：信源更可信 */
+      if(tr) return tr;
+      return x.id.localeCompare(y.id);                             /* 4. 稳定次序 */
+    });
+    return arr;
+  }
+
+  function applyScope(arr){
+    if(state.scope === 'top') return arr.slice(0, state.limit);
+    if(state.scope === 'important') return arr.filter(function(it){ return score(it).total >= S.levels[0].min; });
+    if(state.scope === 'watch') return arr.filter(function(it){ return score(it).total >= S.levels[1].min; });
+    return arr;
+  }
+
+  function whyHTML(it){
+    var s = score(it);
+    var cells = [
+      ['A · 事实分量', s.a, S.dimensions[0].max, s.aLabel],
+      ['B · 信源可信度', s.b, S.dimensions[1].max, s.bLabel],
+      ['C · 可验证度', s.c, S.dimensions[2].max, s.cLabel],
+      ['D · 时效', s.d, S.dimensions[3].max, s.dLabel]
+    ];
+    return '<details class="why"><summary>评分依据 · '+s.total+' / '+S.total+'</summary>'+
+      '<div class="why-grid">'+cells.map(function(c){
+        return '<div class="why-cell"><div class="k">'+esc(c[0])+'</div>'+
+          '<div class="v num">'+c[1]+'<small> / '+c[2]+'</small></div>'+
+          '<div class="r">'+esc(c[3])+'</div></div>';
+      }).join('')+'</div>'+
+      '<div class="why-total">合计 <b class="num">'+s.total+'</b> 分 · 等级「'+esc(s.level.name)+'」· '+esc(S.tieBreak)+'</div>'+
+    '</details>';
+  }
+
+  function rankRowHTML(it, seq){
+    var c = cmap[it.company] || {color:'#1B365D',soft:'#EEF2F8',short:'—'};
+    var cs = catStyle[it.category] || ['#EEF1F5','#4A5568'];
+    var s = score(it);
+    var specIn = it.spec
+      ? '<span class="sep">·</span><span class="specin" title="'+esc(it.spec)+'">'+esc(it.spec.length>44?it.spec.slice(0,44)+'…':it.spec)+'</span>'
+      : '';
+    return '<article class="rank-row">'+
+      '<div class="score-block">'+
+        (seq != null ? '<div class="sn num">No.'+seq+'</div>' : '')+
+        '<div class="sv num">'+s.total+'</div>'+
+        '<span class="sl" style="color:'+s.level.color+';border-color:'+s.level.color+'">'+esc(s.level.name)+'</span>'+
+      '</div>'+
+      '<div class="rank-main">'+
+        '<div class="rank-top">'+
+          '<span class="badge" style="background:'+c.soft+';color:'+c.color+'">'+esc(c.short)+'</span>'+
+          '<span class="cat" style="background:'+cs[0]+';color:'+cs[1]+'">'+esc(it.category)+'</span>'+
+          tierBadge(it)+
+        '</div>'+
+        '<h4 class="rank-title"><a href="'+esc(it.url)+'" target="_blank" rel="noopener noreferrer">'+hl(it.title)+'<span class="ext">↗</span></a></h4>'+
+        '<p class="rank-sum">'+hl(it.summary)+'</p>'+
+        '<div class="rank-meta"><span>'+esc(fmtDate(it.date))+'</span><span class="sep">·</span>'+
+          '<span>'+esc(it.source)+'</span>'+specIn+'</div>'+
+        whyHTML(it)+
+      '</div>'+
+    '</article>';
+  }
+
+  function renderRank(shown, total){
+    var html = '<div class="rank-list">'+shown.map(function(it,i){ return rankRowHTML(it, i+1); }).join('')+'</div>';
+    if(state.scope === 'top' && total > shown.length){
+      var step = Math.min(10, total - shown.length);
+      html += '<div class="more-wrap">'+
+        '<button class="more-btn" id="btnMore">再显示 '+step+' 条 ↓</button>'+
+        '<div class="more-hint">还有 '+(total-shown.length)+' 条按分数排在后面</div></div>';
+    }
+    content.innerHTML = html;
+    if(state.scope === 'top' && total > shown.length){
+      document.getElementById('btnMore').addEventListener('click', function(){ state.limit += 10; render(); });
+    }
+  }
+
+  function renderTime(shown){
+    var groups = {}, order = [];
+    shown.forEach(function(it){
+      var k = it.date;
+      if(!groups[k]){ groups[k] = []; order.push(k); }
+      groups[k].push(it);
+    });
+    order.sort(function(a,b){ return cmpDate(b).localeCompare(cmpDate(a)); });
+    var html = '';
+    order.forEach(function(k){
+      groups[k].sort(function(x,y){ return score(y).total - score(x).total || x.id.localeCompare(y.id); });
+      html += '<div class="day-head"><h3>'+esc(fmtDayHead(k))+'</h3><span class="line"></span><span class="cnt num">'+groups[k].length+' 条</span></div>';
+      html += '<div class="rank-list">'+groups[k].map(function(it){ return rankRowHTML(it, null); }).join('')+'</div>';
+    });
+    content.innerHTML = html;
+  }
+
+  function renderVendors(arr){
+    var max = Math.max.apply(null, D.companies.map(function(c){
+      return arr.filter(function(i){ return i.company===c.id; }).length;
+    }).concat([1]));
+    var html = '';
+    D.companies.forEach(function(c){
+      var n = arr.filter(function(i){ return i.company===c.id; }).length;
+      html += '<div class="vendor-item"><div class="vendor-row">'+
+        '<span class="v-name" title="'+esc(c.name)+'">'+esc(c.short)+'</span>'+
+        '<span class="v-track"><span class="v-fill" style="width:'+(n/max*100)+'%;background:'+c.color+'"></span></span>'+
+        '<span class="v-count num">'+n+'</span></div></div>';
+    });
+    document.getElementById('vendorPanel').innerHTML = html;
+  }
+
+  function render(){
+    var arr = filtered();
+    var shown = applyScope(arr);
+
+    document.getElementById('resultCount').textContent = arr.length;
+    document.getElementById('shownCount').textContent = shown.length;
+    var imp = arr.filter(function(i){ return score(i).level === S.levels[0]; }).length;
+    var t1 = arr.filter(function(i){ return i.tier === 1; }).length;
+    document.getElementById('basisText').textContent =
+      '时间基准 '+anchor+' · 重要 '+imp+' 条 · 官方一手 '+t1+' 条';
+
+    var desc = [];
+    if(state.company!=='all') desc.push((cmap[state.company]||{}).name);
+    if(state.cats.size) desc.push(Array.from(state.cats).join(' / '));
+    if(state.tier!=='all') desc.push(optLabel[state.tier] || state.tier);
+    if(state.range!=='all') desc.push('近'+state.range+'天');
+    if(state.scope!=='top') desc.push(SCOPE_LABEL[state.scope]);
+    if(state.q.trim()) desc.push('「'+state.q.trim()+'」');
+    document.getElementById('resultDesc').textContent = desc.length ? '· ' + desc.join(' · ') : '';
+
+    renderVendors(arr);
+
+    if(!arr.length){
+      content.innerHTML = '<div class="empty"><div class="big">没有匹配的动态</div>试试清除部分筛选条件，或换个关键词。</div>';
+      return;
+    }
+    if(state.view === 'time'){ renderTime(shown); return; }
+    renderRank(shown, arr.length);
+  }
+
+  /* ---------- 控件 ---------- */
+  function buildTabs(){
+    var html = '<button class="tab'+(state.company==='all'?' active':'')+'" data-company="all">'+
+      '<span class="t-dot" style="background:#1B365D"></span>全部<span class="t-n num">'+D.items.length+'</span></button>';
+    D.companies.forEach(function(c){
+      var n = D.items.filter(function(i){ return i.company===c.id; }).length;
+      html += '<button class="tab'+(state.company===c.id?' active':'')+'" data-company="'+c.id+'">'+
+        '<span class="t-dot" style="background:'+c.color+'"></span>'+esc(c.name)+'<span class="t-n num">'+n+'</span></button>';
+    });
+    document.getElementById('companyTabs').innerHTML = html;
+    Array.prototype.forEach.call(document.querySelectorAll('#companyTabs .tab'), function(b){
+      b.addEventListener('click', function(){ state.company = b.dataset.company; buildTabs(); render(); });
+    });
+  }
+
+  function buildCats(){
+    var html = '<span class="lb">动态类型</span>';
+    html += '<button class="fchip'+(state.cats.size===0?' active':'')+'" data-cat="__all">全部</button>';
+    D.meta.categories.forEach(function(k){
+      html += '<button class="fchip'+(state.cats.has(k)?' active':'')+'" data-cat="'+esc(k)+'">'+esc(k)+'</button>';
+    });
+    document.getElementById('catRow').innerHTML = html;
+    Array.prototype.forEach.call(document.querySelectorAll('#catRow .fchip'), function(b){
+      b.addEventListener('click', function(){
+        var k = b.dataset.cat;
+        if(k === '__all') state.cats.clear();
+        else if(state.cats.has(k)) state.cats.delete(k);
+        else state.cats.add(k);
+        buildCats(); render();
+      });
+    });
+  }
+
+  function buildTierSel(){
+    document.getElementById('tierSel').innerHTML = TIER_OPTIONS.map(function(o){
+      return '<option value="'+o.v+'">'+esc(o.label)+'</option>';
+    }).join('');
+  }
+
+  document.getElementById('searchInput').addEventListener('input', function(e){ state.q = e.target.value; state.limit = 10; render(); });
+  document.getElementById('rangeSel').addEventListener('change', function(e){ state.range = e.target.value; state.limit = 10; render(); });
+  document.getElementById('tierSel').addEventListener('change', function(e){ state.tier = e.target.value; state.limit = 10; render(); });
+  document.getElementById('scopeSel').addEventListener('change', function(e){ state.scope = e.target.value; state.limit = 10; render(); });
+
+  Array.prototype.forEach.call(document.querySelectorAll('#viewSeg button'), function(b){
+    b.addEventListener('click', function(){
+      state.view = b.dataset.view;
+      Array.prototype.forEach.call(document.querySelectorAll('#viewSeg button'), function(x){ x.classList.toggle('active', x===b); });
+      render();
+    });
+  });
+
+  document.getElementById('btnReset').addEventListener('click', function(){
+    state.company='all'; state.cats.clear(); state.tier='all'; state.range='all';
+    state.q=''; state.view='rank'; state.scope='top'; state.limit=10;
+    document.getElementById('searchInput').value='';
+    document.getElementById('rangeSel').value='all';
+    document.getElementById('tierSel').value='all';
+    document.getElementById('scopeSel').value='top';
+    Array.prototype.forEach.call(document.querySelectorAll('#viewSeg button'), function(x){ x.classList.toggle('active', x.dataset.view==='rank'); });
+    buildTabs(); buildCats(); render();
+  });
+
+  document.getElementById('btnExport').addEventListener('click', function(){
+    var arr = filtered();
+    if(!arr.length){ alert('当前筛选没有可导出的内容'); return; }
+    var head = ['重要度','等级','公司','日期','动态类型','信源级别',
+                'A事实分量(40)','B信源可信度(30)','C可验证度(20)','D时效(10)',
+                '标题','摘要','参数事实(spec)','产品线','来源','原文链接'];
+    var rows = arr.map(function(it){
+      var s = score(it);
+      return [s.total,s.level.name,(cmap[it.company]||{}).name,it.date,it.category,it.tierName,
+              s.a,s.b,s.c,s.d,it.title,it.summary,it.spec||'',(it.products||[]).join(' / '),it.source,it.url];
+    });
+    var csv = [head].concat(rows).map(function(r){
+      return r.map(function(v){ return '"'+String(v==null?'':v).replace(/"/g,'""')+'"'; }).join(',');
+    }).join('\r\n');
+    var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8;'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'AI大厂动态监测_按重要度_' + D.meta.updatedAt + '.csv';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
+  });
+
+  var mask = document.getElementById('mask');
+  function openMask(){ mask.classList.add('show'); }
+  document.getElementById('btnInfo').addEventListener('click', openMask);
+  document.getElementById('btnHow').addEventListener('click', openMask);
+  document.getElementById('btnClose').addEventListener('click', function(){ mask.classList.remove('show'); });
+  mask.addEventListener('click', function(e){ if(e.target === mask) mask.classList.remove('show'); });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){ mask.classList.remove('show'); document.getElementById('searchInput').blur(); }
+    if(e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT'){
+      e.preventDefault(); document.getElementById('searchInput').focus();
+    }
+  });
+
+  /* ---------- 静态信息 / 评分方法说明（全部来自 meta.scoring） ---------- */
+  document.getElementById('brandSub').textContent = D.meta.subtitle;
+  document.getElementById('metaUpdated').textContent = '数据检索日 ' + D.meta.updatedAt;
+  document.getElementById('metaTotal').textContent = D.items.length;
+  document.getElementById('footDate').textContent = D.meta.updatedAt;
+  document.getElementById('footCoverage').textContent = D.meta.coverage;
+  document.getElementById('foldCount').textContent = D.companies.length;
+  document.getElementById('scopeCount').textContent = D.companies.length;
+  document.getElementById('qnFormula').textContent =
+    S.dimensions.map(function(d){ return d.name + ' ' + d.max; }).join(' + ') + ' = ' + S.total;
+
+  document.getElementById('scorePrinciple').textContent = S.principle;
+  document.getElementById('scoreTotal').textContent = S.total;
+  document.getElementById('scoreDimTable').innerHTML = S.dimensions.map(function(d){
+    return '<tr><td><b>'+esc(d.key+' · '+d.name)+'</b></td><td class="w num">'+d.max+'</td><td>'+esc(d.why)+'</td></tr>';
+  }).join('');
+
+  function ruleLine(name, pairs){
+    return '<div class="rule-block"><b>'+esc(name)+'</b><br><span class="rv">'+
+      pairs.map(function(p){ return esc(p[0])+' '+p[1]+' 分'; }).join(' · ') + '</span></div>';
+  }
+  document.getElementById('scoreRules').innerHTML =
+    ruleLine('A 事实分量 · 按动态类型', Object.keys(S.catScore).map(function(k){ return [k, S.catScore[k]]; })) +
+    ruleLine('B 信源可信度 · 按信源等级', D.meta.tiers.map(function(t){ return [t.key+' '+t.name, S.tierScore[String(t.id)]]; })) +
+    ruleLine('C 可验证度 · 按能否复核', [['带 spec 参数行',S.specScore.spec],['摘要含可核对数字',S.specScore.numeric],['纯定性描述',S.specScore.none]]) +
+    ruleLine('D 时效 · 距数据最新日', S.recencyScore.map(function(r){ return [r.label, r.score]; }));
+
+  document.getElementById('levelList').innerHTML = S.levels.map(function(l, idx){
+    var prev = idx > 0 ? S.levels[idx-1].min : null;
+    var next = idx+1 < S.levels.length ? S.levels[idx+1].min : null;
+    var range = idx===0 ? ('≥ '+l.min+' 分')
+              : (next != null ? (l.min+'–'+(prev-1)+' 分') : ('< '+prev+' 分'));
+    return '<li><b>'+esc(l.name)+'</b>（'+range+'）：'+
+      (idx===0 ? '默认优先露出，可用「重要信息」范围单独查看。' :
+       idx===1 ? '值得留意，可用「关注及以上」范围查看。' : '备查，收在「全部动态」里，默认不铺开。')+'</li>';
+  }).join('');
+  document.getElementById('scoreTie').textContent = '同分次序：' + S.tieBreak + '。';
+  document.getElementById('scoreExcluded').textContent = S.excluded;
+
+  document.getElementById('tierDefList').innerHTML = D.meta.tiers.map(function(t){
+    return '<li><b>'+esc(t.key+' '+t.name)+'</b>：'+esc(t.desc)+'。</li>';
+  }).join('');
+  document.getElementById('scopeList').innerHTML = D.companies.map(function(c){
+    return '<li><b>'+esc(c.name)+'</b>：'+esc(c.lines)+'。</li>';
+  }).join('');
+
+  buildTabs(); buildCats(); buildTierSel(); render();
+})();
+</script>
+</body>
+</html>
