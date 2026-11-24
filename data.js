@@ -18,7 +18,7 @@ window.MONITOR_DATA = {
   "meta": {
     "title": "国内 AI 大厂动态监测台",
     "subtitle": "21 家厂商 · 按重要度评分排序",
-    "updatedAt": "2026-11-20",
+    "updatedAt": "2026-11-24",
     "coverage": "21 家厂商 · 2026-06 → 2026-11",
     "categories": [
       "模型发布",
@@ -1910,6 +1910,113 @@ window.MONITOR_DATA = {
       "tier": 2,
       "tierName": "T2 权威媒体",
       "spec": "MiniCPM 家族全球下载 7000 万+ 次（11 月 10 日为 6000 万）"
+    },
+    {
+      "id": "d20261124-01",
+      "company": "zhipu",
+      "date": "2026-11-23",
+      "category": "模型发布",
+      "title": "智谱发布 GLM-5.4：首个 Loop Transformer 旗舰，向泛 Coding 扩展",
+      "summary": "智谱 AI 官方发布 GLM-5.4，为其第一代采用 Loop Transformer 架构的旗舰模型：让一组共享权重的层循环执行，在不增加参数量的前提下加深有效计算深度，官方称智能水平达到 2–3T 级模型。模型新增视觉能力，可完成视频生成与处理、完整游戏构建、3D 建模与机械设计等非传统编程任务，官方以 200 个真实场景编程任务评测。即日起向 GLM Coding Plan 全量用户开放，同步上线 ZCode、Trae、WorkBuddy、Qoder；API 待安全评估完成后开放，模型权重计划开源。官方披露非高峰时段速度最高 200 token/s，高峰 70–80 token/s，Coding Plan V2/V3/团队版额度提升至 1.5 倍。",
+      "products": [
+        "GLM-5.4",
+        "ZCode",
+        "GLM Coding Plan"
+      ],
+      "source": "智谱 AI 官网研究博客",
+      "url": "https://www.zhipuai.cn/zh/research/164",
+      "tier": 1,
+      "tierName": "T1 官方一手",
+      "spec": "首个 Loop Transformer 旗舰 · 官方称智能水平对标 2–3T 级 · 200 场景编程评测 · 峰值 70–80 token/s"
+    },
+    {
+      "id": "d20261124-02",
+      "company": "baidu",
+      "date": "2026-11-24",
+      "category": "开源开放",
+      "title": "百度文心 5.5 Flash Preview 正式开源：2800 亿总参 / 140 亿激活，Apache 2.0",
+      "summary": "百度将文心 5.5 Flash Preview（ERNIE 5.5 Flash Preview）后训练权重以 Apache 2.0 协议开源，权重与配套资源上架 Hugging Face（baidu/ERNIE-5.5-Flash-Preview）与 ModelScope，支持 vLLM、SGLang 部署。模型为 MoE 架构，总参 2800 亿、每 token 激活 140 亿，支持最长 100 万 token 上下文；中间训练阶段将上下文从 128K 扩至 1M。官方模型卡成绩：Terminal-Bench 4.0 46.5、DeepSWE v1.1 71.2、AutomationBench 61.9、SpreadsheetBench V2 36.4；CodeArena WebDev 1668 分，居开源模型第二。该模型 11 月 11 日上线千帆，11 月 5 日已开源同架构 Base 版，三周内补完后训练权重。",
+      "products": [
+        "文心 5.5 Flash Preview",
+        "ERNIE 5.5 Flash Base",
+        "百度智能云千帆"
+      ],
+      "source": "Hugging Face 官方权重仓库（百度官方组织）",
+      "url": "https://huggingface.co/baidu/ERNIE-5.5-Flash-Preview",
+      "tier": 1,
+      "tierName": "T1 官方一手",
+      "spec": "2800 亿总参 / 140 亿激活 MoE · 1M 上下文 · Apache 2.0 · CodeArena WebDev 1668"
+    },
+    {
+      "id": "d20261124-03",
+      "company": "tencent",
+      "date": "2026-11-20",
+      "category": "开源开放",
+      "title": "腾讯混元 Hy4 正式版权重开源：770B / 49B 激活，混元 LLM 系列全量开放",
+      "summary": "腾讯混元团队 11 月 20 日宣布 Hy4 正式版权重开源，GitHub、Hugging Face、ModelScope、GitCode 四平台同步上线。放出的是一整套：Hy4 正式版总参 770B、每 token 激活 49B、上下文 100 万 token；Hy4-FP8 量化版（存储减半，官方 vLLM 方案默认加载）；Hy4-base 预训练底座；GGUF 量化版；并随权重公开 System Card 安全评估卡片。至此混元 LLM 系列（Hy3 preview、Hy3、Hy4 preview、Hy4、Hy4 flash）全部开放。BF16 权重约 1.5TB，官方建议 8 卡起步自部署。",
+      "products": [
+        "Hy4",
+        "Hy4-FP8",
+        "Hy4-base",
+        "Hy4 flash"
+      ],
+      "source": "腾讯云开发者社区（混元官方技术说明）",
+      "url": "https://cloud.tencent.com/developer/article/2791524",
+      "tier": 1,
+      "tierName": "T1 官方一手",
+      "spec": "770B 总参 / 49B 激活 · 1M 上下文 · 四平台同步 · 含 FP8 / Base / GGUF / System Card"
+    },
+    {
+      "id": "d20261124-04",
+      "company": "huawei",
+      "date": "2026-11-20",
+      "category": "硬件终端",
+      "title": "华为发布子品牌 OSTA 星芒，首款鸿蒙 AI 手机 O1 Pro 5499 元起开售",
+      "summary": "华为正式发布全新子品牌 OSTA 星芒，与华为主品牌共享技术底座与品质标准，首款产品 OSTA O1 Pro 鸿蒙 AI 手机同步开售，首发限时价 5499 元起。该机为 6.39 英寸 16:9.5 阔直板，屏占比 96.1%、边框 1.05mm、厚 6.68mm，搭载麒麟 9030S 芯片与 HarmonyOS 7 AI 先锋版，7000mAh 电池、峰值亮度 6500nits，后置 2 亿像素主摄 + 5000 万潜望长焦 + 第二代红枫原色摄像头。AI 侧为系统级 AI 屏 + 小艺对话栏，开放 300 余项系统数据接口、整合 2100 多项系统技能与 500 多个生态应用，采用四层全域记忆架构，官方实验室长周期记忆准确率超 92%。目前 500 余家合作伙伴接入该品牌服务体系。",
+      "products": [
+        "OSTA 星芒",
+        "OSTA O1 Pro",
+        "HarmonyOS 7 AI 先锋版",
+        "小艺"
+      ],
+      "source": "新华网",
+      "url": "https://www.xinhuanet.com/tech/20261124/1d549aef95ca4694be98333a28432d29/c.html",
+      "tier": 1.5,
+      "tierName": "T1.5 官方媒体",
+      "spec": "麒麟 9030S · 6.39 英寸 16:9.5 · 屏占比 96.1% · 7000mAh · 记忆准确率 92%+ · 5499 元起"
+    },
+    {
+      "id": "d20261124-05",
+      "company": "minimax",
+      "date": "2026-11-22",
+      "category": "模型发布",
+      "title": "MiniMax 公布内部模型 MIM 的自动化密码分析成果，8 篇报告附可运行 PoC",
+      "summary": "MiniMax 公布内部模型 MIM（MiniMax's Internal Model）的系统性自动化密码分析结果，一次性发布 8 篇带 PoC 代码的分析报告，代码开放在 GitHub 的 MiniMax-AI/Research 仓库。官方称：在 TII McEliece 国际密钥恢复挑战中恢复 94 个实例私钥，其中 55 个为此前无公开解的高阶实例；已有公开纪录的实例用单台 64 核服务器 1.80–5.36 秒完成，相比此前公开纪录与其对照的多 GPU 集群方案实测加速 6180–43400 倍。后量子候选方案 LOCKER-I 的辅助矩阵由 42PB 压缩至 58MB、12 线程 1.15 秒恢复密钥；ROLLO-I-128 单核约 5.97 秒。MiniMax 明确表示研究对象为学术前沿方案、历史竞赛设计与公开参数挑战，不影响 AES、RSA、ML-KEM 等现行主流密码标准；MIM 目前仍是未公开的内部模型，规模与训练方式未披露，结果尚无第三方复现。",
+      "products": [
+        "MIM（MiniMax's Internal Model）"
+      ],
+      "source": "央广网",
+      "url": "https://www.cnr.cn/tech/techph/20261123/t20261123_527880637.shtml",
+      "tier": 1.5,
+      "tierName": "T1.5 官方媒体",
+      "spec": "94 实例私钥 / 55 个首破 · 1.80–5.36 秒 · 加速 6180–43400 倍 · LOCKER-I 42PB→58MB"
+    },
+    {
+      "id": "d20261124-06",
+      "company": "kuaishou",
+      "date": "2026-10-30",
+      "category": "战略资本",
+      "title": "可灵 AI 完成增资交割：实募 198.02 亿元，投后估值近 180 亿美元",
+      "summary": "快手公告披露，旗下可灵 AI 完成新一轮增资交割，实际融资约 198.02 亿元，投后估值接近 180 亿美元；交易后可灵从快手内部业务转为引入外部股东的独立经营主体，快手保留控制权并继续并表（持股约 68%）。投资方包括腾讯、阿里云、百度，以及国家人工智能产业投资基金（出资 14 亿元）、上海国方数科（16.9 亿元）、金蝶、沐曦等。可灵 2026 Q1 收入超 6.5 亿元、同比增超 300%，Q2 超 8.5 亿元、同比增超 200%，上半年合计超 15 亿元；截至 6 月底全球用户破 1 亿、企业客户近 5 万家。快手 2024、2025 年可灵业务净亏损分别约 5 亿元、19 亿元，公司计划 2027 年初推进港股递表。",
+      "products": [
+        "可灵 AI",
+        "Kling 4.0"
+      ],
+      "source": "界面新闻",
+      "url": "https://www.jiemian.com/article/15358368.html",
+      "tier": 2,
+      "tierName": "T2 权威媒体",
+      "spec": "实募 198.02 亿元 · 投后近 180 亿美元 · 快手持股约 68% · 上半年收入超 15 亿元"
     }
   ]
 };
